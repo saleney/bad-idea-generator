@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bad Idea Generator</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f7f4ee;
+      color: #111;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+    }
+    .container { width: 100%; max-width: 700px; text-align: center; }
+    h1 {
+      margin: 0;
+      font-size: clamp(58px, 13vw, 105px);
+      line-height: .86;
+      font-weight: 900;
+      letter-spacing: -5px;
+    }
+    .subtitle {
+      margin: 26px auto 32px;
+      font-size: 17px;
+      line-height: 1.4;
+      max-width: 420px;
+    }
+    .generate-button {
+      border: 3px solid #111;
+      background: #ff3158;
+      color: #111;
+      padding: 17px 28px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 6px 6px 0 #111;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .generate-button:hover {
+      transform: translate(3px,3px);
+      box-shadow: 3px 3px 0 #111;
+    }
+    .generate-button:active {
+      transform: translate(6px,6px);
+      box-shadow: 0 0 0 #111;
+    }
+    .result {
+      display: none;
+      margin-top: 48px;
+      background: white;
+      border: 4px solid #111;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 9px 9px 0 #111;
+      animation: appear .25s ease;
+    }
+    @keyframes appear {
+      from { opacity: 0; transform: scale(.96) rotate(-1deg); }
+      to { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    .result-label {
+      display: inline-block;
+      background: #111;
+      color: white;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .idea {
+      font-size: clamp(32px, 7vw, 58px);
+      line-height: .98;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .meter-title {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .meter {
+      height: 24px;
+      width: 100%;
+      border: 3px solid #111;
+      background: #eee;
+      overflow: hidden;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: #ff3158;
+      transition: width .5s ease;
+    }
+    .meter-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .score { font-size: 22px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .stat {
+      border: 3px solid #111;
+      padding: 13px 8px;
+      text-align: center;
+      background: #f7f4ee;
+    }
+    .stat-title {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .stat-value { font-size: 14px; font-weight: 900; }
+    .comment {
+      margin-top: 24px;
+      padding: 17px;
+      background: #fff0f3;
+      border: 3px solid #111;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.35;
+      text-align: center;
+    }
+    .footer {
+      margin-top: 38px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: .5;
+    }
+    @media (max-width: 520px) {
+      body { padding: 24px 16px; }
+      h1 { letter-spacing: -4px; }
+      .result { padding: 22px; box-shadow: 7px 7px 0 #111; }
+      .stats { grid-template-columns: 1fr; }
+      .generate-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>BAD IDEA<br>GENERATOR</h1>
+    <p class="subtitle">
+      For questionable decision making.
+    </p>
+
+    <button class="generate-button" id="generateButton">
+      Give Me a Bad Idea
+    </button>
+
+    <section class="result" id="result">
+      <div class="result-label" id="severityLabel">BAD IDEA</div>
+      <div class="idea" id="idea">Stay friends with your ex.</div>
+
+      <div class="meter-title">Bad Idea Meter</div>
+      <div class="meter">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+
+      <div class="meter-info">
+        <span id="meterLabel">Absolutely Not</span>
+        <span class="score" id="score">99%</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-title">Regret Potential</div>
+          <div class="stat-value" id="regret">High</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Emotional Damage</div>
+          <div class="stat-value" id="damage">Severe</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Character Development</div>
+          <div class="stat-value" id="character">Inevitable</div>
+        </div>
+      </div>
+
+      <div class="comment" id="comment">Girl.</div>
+    </section>
+
+    <div class="footer">Full Send Responsibly</div>
+  </main>
+
+  <script>
+    const badIdeas = [
+      ["Stay friends with your ex.", 99],
+      ["Text your ex \"I had a dream about you.\"", 94],
+      ["Check your ex's following list at 1:47 AM.", 97],
+      ["Send the paragraph.", 91],
+      ["Ask your ex if they ever miss you.", 96],
+      ["Meet up for coffee \"as friends.\"", 88],
+      ["Accidentally like a photo from 2019.", 93],
+      ["Download Hinge for character development.", 76],
+      ["Google your ex's new girlfriend.", 95],
+      ["Ask your situationship where this is going.", 85],
+      ["Give the emotionally unavailable person another chance.", 93],
+      ["Send \"hey stranger\" and immediately turn off your phone.", 90],
+      ["Check if they viewed your story.", 74],
+      ["Tell yourself this time will be different.", 97],
+      ["Tell someone exactly how you feel.", 35],
+      ["Post something specifically so one person will see it.", 87],
+      ["Check their location. You know you want to.", 98],
+      ["Tell yourself you can handle friends with benefits.", 92],
+      ["Show up somewhere because you know they'll be there.", 94],
+      ["Look them up on LinkedIn.", 81],
+      ["Send \"I miss you\" and throw your phone across the room.", 96],
+      ["Buy the thing because it was on sale.", 42],
+      ["Put it on the credit card.", 68],
+      ["Order another Michelin tasting menu.", 57],
+      ["Spend $200 because you had a bad day.", 69],
+      ["Make an impulsive purchase because \"you deserve it.\"", 63],
+      ["Quit your job and figure it out later.", 89],
+      ["Send the email while you're angry.", 86],
+      ["Tell your boss exactly what you think.", 84],
+      ["Make a five-year plan because you had one productive morning.", 38],
+      ["Start an entirely new career because you're bored.", 73],
+      ["Move to another city because you had a weird Tuesday.", 65],
+      ["Make a major life decision at 2 AM.", 88],
+      ["Cut your own bangs at 2 AM.", 91],
+      ["Get bangs again.", 89],
+      ["Re-read all your old texts.", 79],
+      ["Open your old screenshots folder.", 82],
+      ["Have one more drink.", 67],
+      ["Make a life-changing decision because Mercury is retrograde.", 72],
+      ["Email your ex's mom to ask how they're doing.", 100],
+      ["Send the screenshot to the group chat.", 58],
+      ["Ask your friend to investigate their Instagram for you.", 80],
+      ["Reply \"haha\" when you are absolutely not fine.", 64],
+      ["Start an entirely new personality on Monday.", 52],
+      ["Say \"fuck it\" and full send.", 100],
+      ["Book the vacation you've been thinking about.", 18],
+      ["Book a flight before checking your calendar.", 70],
+      ["Go somewhere because you heard they might be there.", 92],
+      ["Take a solo trip with absolutely no itinerary.", 31],
+      ["Extend the trip because you don't want to go home.", 48],
+      ["Take yourself out to dinner.", 5],
+      ["Buy yourself flowers.", 8],
+      ["Try something you've been scared to try.", 12],
+      ["Take the day off and do absolutely nothing.", 10],
+      ["Go to bed instead of texting them.", 2],
+      ["Drink some water and sleep on it.", 1],
+      ["Delete the dating app for a week.", 14],
+      ["Make plans with your friends instead.", 7],
+      ["Go for a walk before making the decision.", 3],
+      ["Leave the situation alone for 24 hours.", 6]
+    ];
+
+    const generateButton = document.getElementById("generateButton");
+    const result = document.getElementById("result");
+    const idea = document.getElementById("idea");
+    const severityLabel = document.getElementById("severityLabel");
+    const meterFill = document.getElementById("meterFill");
+    const meterLabel = document.getElementById("meterLabel");
+    const score = document.getElementById("score");
+    const regret = document.getElementById("regret");
+    const damage = document.getElementById("damage");
+    const character = document.getElementById("character");
+    const comment = document.getElementById("comment");
+
+    function getSeverity(value) {
+      if (value <= 20) return "Honestly, This Is Fine";
+      if (value <= 40) return "Questionable";
+      if (value <= 60) return "Hmm...";
+      if (value <= 75) return "Bad Idea";
+      if (value <= 89) return "Terrible Idea";
+      if (value <= 99) return "Absolutely Not";
+      return "FULL SEND";
+    }
+
+    function getRegret(value) {
+      if (value <= 30) return "Low";
+      if (value <= 55) return "Moderate";
+      if (value <= 75) return "Medium";
+      if (value <= 89) return "High";
+      if (value <= 99) return "Catastrophic";
+      return "Historic";
+    }
+
+    function getDamage(value) {
+      if (value <= 30) return "Minimal";
+      if (value <= 55) return "Manageable";
+      if (value <= 75) return "Possible";
+      if (value <= 89) return "Pending";
+      if (value <= 99) return "Severe";
+      return "Girl.";
+    }
+
+    function getCharacter(value) {
+      if (value <= 30) return "None Needed";
+      if (value <= 55) return "Maybe";
+      if (value <= 75) return "Potentially";
+      if (value <= 89) return "Likely";
+      if (value <= 99) return "Inevitable";
+      return "Villain Origin Story";
+    }
+
+    function getComment(value) {
+      if (value <= 20) return "Wait... this might actually be a good idea.";
+      if (value <= 40) return "Okay, questionable. But we're fine.";
+      if (value <= 60) return "I wouldn't recommend it.";
+      if (value <= 75) return "You know this could go badly.";
+      if (value <= 89) return "You KNOW this is a bad idea.";
+      if (value <= 99) return "Put the phone down.";
+      return "Girl.";
+    }
+
+    function generateBadIdea() {
+      const randomIndex = Math.floor(Math.random() * badIdeas.length);
+      const selected = badIdeas[randomIndex];
+      const text = selected[0];
+      const value = selected[1];
+
+      idea.textContent = text;
+      score.textContent = value + "%";
+      meterFill.style.width = value + "%";
+      severityLabel.textContent = getSeverity(value);
+      meterLabel.textContent = getSeverity(value);
+      regret.textContent = getRegret(value);
+      damage.textContent = getDamage(value);
+      character.textContent = getCharacter(value);
+      comment.textContent = getComment(value);
+
+      result.style.display = "block";
+      result.style.animation = "none";
+      void result.offsetWidth;
+      result.style.animation = "appear .25s ease";
+
+      generateButton.textContent = "Give Me Another Bad Idea";
+
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+
+    generateButton.addEventListener("click", generateBadIdea);
+  </script>
+</body>
+</html>
