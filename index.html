@@ -138,14 +138,20 @@
     .stat-value { font-size: 14px; font-weight: 900; }
     .comment {
       margin-top: 24px;
-      padding: 17px;
-      background: #fff0f3;
-      border: 3px solid #111;
       font-size: 18px;
       font-weight: 800;
       line-height: 1.35;
       text-align: center;
     }
+    .result-button {
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    .result-button .generate-button {
+      width: auto;
+    }
+
     .footer {
       margin-top: 38px;
       font-size: 10px;
@@ -204,6 +210,8 @@
       </div>
 
       <div class="comment" id="comment">Girl.</div>
+
+      <div class="result-button" id="resultButton"></div>
     </section>
 
     <div class="footer">Full Send Responsibly</div>
@@ -274,6 +282,8 @@
     ];
 
     const generateButton = document.getElementById("generateButton");
+    const startButton = document.getElementById("startButton");
+    const resultButton = document.getElementById("resultButton");
     const result = document.getElementById("result");
     const idea = document.getElementById("idea");
     const severityLabel = document.getElementById("severityLabel");
@@ -354,6 +364,10 @@
       result.style.animation = "appear .25s ease";
 
       generateButton.textContent = "Give Me Another Bad Idea";
+
+      if (!resultButton.contains(generateButton)) {
+        resultButton.appendChild(generateButton);
+      }
 
       result.scrollIntoView({
         behavior: "smooth",
