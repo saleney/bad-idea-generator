@@ -161,11 +161,109 @@
       opacity: .5;
     }
     @media (max-width: 520px) {
-      body { padding: 24px 16px; }
-      h1 { letter-spacing: -4px; }
-      .result { padding: 22px; box-shadow: 7px 7px 0 #111; }
-      .stats { grid-template-columns: 1fr; }
-      .generate-button { width: 100%; }
+      body {
+        min-height: 100svh;
+        padding: 18px 14px;
+        align-items: flex-start;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: clamp(48px, 16vw, 72px);
+        letter-spacing: -4px;
+        line-height: .84;
+      }
+
+      .subtitle {
+        margin: 16px auto 20px;
+        font-size: 15px;
+      }
+
+      .generate-button {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 14px;
+      }
+
+      .result {
+        margin-top: 28px;
+        padding: 18px;
+        box-shadow: 6px 6px 0 #111;
+      }
+
+      .result-label {
+        margin-bottom: 12px;
+        padding: 6px 9px;
+        font-size: 10px;
+      }
+
+      .idea {
+        font-size: clamp(28px, 8vw, 42px);
+        letter-spacing: -1.2px;
+        margin-bottom: 20px;
+      }
+
+      .meter-title {
+        font-size: 10px;
+        margin-bottom: 5px;
+      }
+
+      .meter {
+        height: 16px;
+        border-width: 2px;
+      }
+
+      .meter-info {
+        margin-top: 5px;
+        font-size: 10px;
+      }
+
+      .score {
+        font-size: 18px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 18px;
+      }
+
+      .stat {
+        border-width: 2px;
+        padding: 8px 4px;
+      }
+
+      .stat-title {
+        font-size: 7px;
+        letter-spacing: .4px;
+        margin-bottom: 4px;
+      }
+
+      .stat-value {
+        font-size: 10px;
+        line-height: 1.1;
+      }
+
+      .comment {
+        margin-top: 16px;
+        font-size: 15px;
+      }
+
+      .result-button {
+        margin-top: 18px;
+      }
+
+      .result-button .generate-button {
+        width: 100%;
+      }
+
+      .footer {
+        margin-top: 20px;
+        font-size: 8px;
+      }
     }
   </style>
 </head>
