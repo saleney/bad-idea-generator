@@ -136,22 +136,6 @@
       margin-bottom: 6px;
     }
     .stat-value { font-size: 14px; font-weight: 900; }
-    .comment {
-      margin-top: 24px;
-      font-size: 18px;
-      font-weight: 800;
-      line-height: 1.35;
-      text-align: center;
-    }
-    .result-button {
-      margin-top: 28px;
-      text-align: center;
-    }
-
-    .result-button .generate-button {
-      width: auto;
-    }
-
     .footer {
       margin-top: 38px;
       font-size: 10px;
@@ -247,13 +231,8 @@
         line-height: 1.1;
       }
 
-      .comment {
-        margin-top: 16px;
-        font-size: 15px;
-      }
-
       .result-button {
-        margin-top: 18px;
+        margin-top: 40px;
       }
 
       .result-button .generate-button {
@@ -306,8 +285,6 @@
           <div class="stat-value" id="character">Inevitable</div>
         </div>
       </div>
-
-      <div class="comment" id="comment">Girl.</div>
 
       <div class="result-button" id="resultButton"></div>
     </section>
@@ -391,7 +368,6 @@
     const regret = document.getElementById("regret");
     const damage = document.getElementById("damage");
     const character = document.getElementById("character");
-    const comment = document.getElementById("comment");
 
     function getSeverity(value) {
       if (value <= 20) return "Honestly, This Is Fine";
@@ -430,16 +406,6 @@
       return "Villain Origin Story";
     }
 
-    function getComment(value) {
-      if (value <= 20) return "Wait... this might actually be a good idea.";
-      if (value <= 40) return "Okay, questionable. But we're fine.";
-      if (value <= 60) return "I wouldn't recommend it.";
-      if (value <= 75) return "You know this could go badly.";
-      if (value <= 89) return "You KNOW this is a bad idea.";
-      if (value <= 99) return "Put the phone down.";
-      return "Girl.";
-    }
-
     function generateBadIdea() {
       const randomIndex = Math.floor(Math.random() * badIdeas.length);
       const selected = badIdeas[randomIndex];
@@ -454,8 +420,6 @@
       regret.textContent = getRegret(value);
       damage.textContent = getDamage(value);
       character.textContent = getCharacter(value);
-      comment.textContent = getComment(value);
-
       result.style.display = "block";
       result.style.animation = "none";
       void result.offsetWidth;
